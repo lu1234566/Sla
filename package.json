@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test tests/unit/*.test.js",
-    "test:e2e": "node tests/e2e/smoke.mjs"
+    "test:e2e": "node tests/e2e/smoke.mjs",
+    "build:artifact": "VITE_MODEL_EXT=.gltf.json vite build --outDir dist-artifact && node tools/glb-to-gltf-json.mjs public/models dist-artifact/models"
   },
   "dependencies": {
     "three": "0.170.0"

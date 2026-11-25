@@ -28,6 +28,9 @@ npm run build      # gera dist/
 npm run preview
 ```
 
+Para hosts que não servem `.glb`, `npm run build:artifact` gera `dist-artifact/`
+com os mesmos modelos convertidos para glTF JSON (`tools/glb-to-gltf-json.mjs`).
+
 Parâmetros de URL úteis: `?quality=low` (sem sombras/bloom, para máquinas
 fracas), `?skipintro`, `?autostart`.
 

@@ -5,6 +5,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { mat, crystalMat, glowMat, PALETTE } from './palette.js';
 
 const BASE = import.meta.env.BASE_URL + 'models/';
+// O build "artifact" usa glTF JSON (.gltf.json) porque o host não serve .glb.
+const EXT = import.meta.env.VITE_MODEL_EXT || '.glb';
+const url = (file) => BASE + file.replace(/\.glb$/, EXT);
 
 export const ORIGINALS = {
   iris: 'originais/01_iris_exploradora.glb',
@@ -98,7 +101,7 @@ export class Assets {
     ];
     let done = 0;
     await Promise.all(jobs.map(async ([kind, key, file]) => {
-      const gltf = await this.loader.loadAsync(BASE + file);
+      const gltf = await this.loader.loadAsync(url(file));
       if (kind === 'o') this.originals[key] = gltf.scene;
       else {
         this.props[key] = gltf.scene;
