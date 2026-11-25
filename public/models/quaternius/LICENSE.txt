@@ -1,0 +1,17 @@
+Modelos 3D ambientais — Quaternius (https://quaternius.com)
+Licença: CC0 1.0 Universal (domínio público)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Baixados em 2026-11-25 do repositório público
+https://github.com/trebeljahr/quaternius-showcase (pasta public/glb/, commit 0128ca5), que
+espelha os pacotes oficiais e documenta a licença de cada pacote em LICENSES.md.
+
+Pacotes de origem:
+- nature_pack ............... Ultimate Nature Pack        https://quaternius.com/packs/ultimatenature.html
+- rpg_items_pack ............ Ultimate RPG Pack           https://quaternius.com/packs/ultimaterpg.html
+- modular_dungeon_pack ...... Modular Dungeon Pack        https://quaternius.com/packs/medievaldungeon.html
+- platformer_game_pack ...... Platformer Game Kit         https://quaternius.com/packs/ultimateplatformer.html
+- real_time_strategy_pack ... Ultimate Fantasy RTS        https://quaternius.com/packs/ultimatefantasyrts.html
+
+Os arquivos não foram modificados; no jogo, os materiais são substituídos em
+tempo de execução pela paleta da bíblia de arte de Maré de Vidro.

@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Prancha de modelos</title><style>body{margin:0;background:#102331;color:#E9D8AC;font:11px sans-serif;display:flex;flex-wrap:wrap}div{width:200px;text-align:center}img{width:200px;height:170px;display:block}</style></head><body>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const files = (new URLSearchParams(location.search).get('f') || '').split(',').filter(Boolean);
+const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(400, 340);
+const loader = new GLTFLoader();
+for (const f of files) {
+  const g = await loader.loadAsync(f);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(0x1b3442);
+  scene.add(new THREE.HemisphereLight(0xbfe9ff, 0x223344, 1.2));
+  const d = new THREE.DirectionalLight(0xffe2b8, 2.2); d.position.set(3, 5, 4); scene.add(d);
+  scene.add(g.scene);
+  const box = new THREE.Box3().setFromObject(g.scene); const size = box.getSize(new THREE.Vector3()); const c = box.getCenter(new THREE.Vector3());
+  const rad = size.length() / 2; const cam = new THREE.PerspectiveCamera(35, 400 / 340, 0.01, 1000);
+  cam.position.copy(c).add(new THREE.Vector3(1, 0.7, 1.4).normalize().multiplyScalar(rad * 3.2)); cam.lookAt(c);
+  r.render(scene, cam);
+  const div = document.createElement('div'); const img = new Image(); img.src = r.domElement.toDataURL(); div.appendChild(img);
+  let tris = 0; const mats = new Set();
+  g.scene.traverse(o => { if (o.isMesh) { tris += (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3; [].concat(o.material).forEach(m => mats.add(m.name + (m.map ? '*' : ''))); } });
+  div.append(`${f.split('/').slice(-2).join('/')} | ${size.x.toFixed(2)}x${size.y.toFixed(2)}x${size.z.toFixed(2)} | ${tris | 0}t | ${[...mats].join(',')}`);
+  document.body.appendChild(div);
+}
+document.title = 'done';
+</script></body></html>

@@ -1,0 +1,13 @@
+MARÉ DE VIDRO — KIT DE PRÉ-PRODUÇÃO
+
+Arquivos originais, criados proceduralmente para este projeto.
+
+01_iris_exploradora.glb — 4212 triângulos
+02_lume_drone.glb — 2344 triângulos
+03_guardiao_de_sal.glb — 2816 triângulos
+04_santuario_das_mares.glb — 2628 triângulos
+
+Os modelos GLB contêm geometria e materiais PBR de cor sólida; sistema glTF Y-up. São modelos estáticos e separados em componentes, sem rig, animações, colisões, texturas ou UV de produção. A escala de jogo precisa ser normalizada.
+
+Importação no Blender: Arquivo > Importar > glTF 2.0 (.glb/.gltf).
+Os PNGs são renders conceituais e uma ilustração de ambiente; não são capturas de gameplay.

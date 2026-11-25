@@ -1,0 +1,20 @@
+{
+  "name": "mare-de-vidro",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Maré de Vidro — fatia vertical do Jardim Mineral (aventura 3D de exploração e puzzles de maré).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/unit/*.test.js",
+    "test:e2e": "node tests/e2e/smoke.mjs"
+  },
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "vite": "5.4.11"
+  }
+}
