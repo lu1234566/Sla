@@ -10,6 +10,46 @@ const BASE = import.meta.env.BASE_URL + 'models/';
 const EXT = import.meta.env.VITE_MODEL_EXT || '.glb';
 const url = (file) => BASE + file.replace(/\.glb$/, EXT);
 
+/**
+ * Carrega um glTF JSON com buffer embutido sem buscar a URL `data:` (a CSP de
+ * alguns hosts, como o de artifacts, bloqueia fetch de `data:`): decodifica o
+ * base64 aqui, remonta um GLB em memória e entrega ao GLTFLoader.parse.
+ */
+async function loadEmbeddedGltf(loader, href) {
+  const res = await fetch(href);
+  if (!res.ok) throw new Error(`HTTP ${res.status} ao carregar ${href}`);
+  const json = await res.json();
+  let bin = null;
+  const buf = json.buffers?.[0];
+  if (buf?.uri?.startsWith('data:')) {
+    const raw = atob(buf.uri.slice(buf.uri.indexOf(',') + 1));
+    bin = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) bin[i] = raw.charCodeAt(i);
+    delete buf.uri;
+  }
+  const jsonBytes = new TextEncoder().encode(JSON.stringify(json));
+  const jsonPad = (4 - (jsonBytes.length % 4)) % 4;
+  const binLen = bin ? bin.length : 0;
+  const binPad = (4 - (binLen % 4)) % 4;
+  const total = 20 + jsonBytes.length + jsonPad + (bin ? 8 + binLen + binPad : 0);
+  const glb = new ArrayBuffer(total);
+  const dv = new DataView(glb), u8 = new Uint8Array(glb);
+  dv.setUint32(0, 0x46546c67, true); // 'glTF'
+  dv.setUint32(4, 2, true);
+  dv.setUint32(8, total, true);
+  dv.setUint32(12, jsonBytes.length + jsonPad, true);
+  dv.setUint32(16, 0x4e4f534a, true); // 'JSON'
+  u8.set(jsonBytes, 20);
+  u8.fill(0x20, 20 + jsonBytes.length, 20 + jsonBytes.length + jsonPad);
+  if (bin) {
+    const o = 20 + jsonBytes.length + jsonPad;
+    dv.setUint32(o, binLen + binPad, true);
+    dv.setUint32(o + 4, 0x004e4942, true); // 'BIN'
+    u8.set(bin, o + 8);
+  }
+  return new Promise((resolve, reject) => loader.parse(glb, '', resolve, reject));
+}
+
 export const ORIGINALS = {
   iris: 'originais/01_iris_exploradora.glb',
   lume: 'originais/02_lume_drone.glb',
@@ -102,7 +142,8 @@ export class Assets {
     ];
     let done = 0;
     await Promise.all(jobs.map(async ([kind, key, file]) => {
-      const gltf = await this.loader.loadAsync(url(file));
+      const href = url(file);
+      const gltf = href.endsWith('.json') ? await loadEmbeddedGltf(this.loader, href) : await this.loader.loadAsync(href);
       if (kind === 'o') this.originals[key] = gltf.scene;
       else {
         this.props[key] = gltf.scene;

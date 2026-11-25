@@ -30,6 +30,7 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #loading .bar b { display: block; height: 100%; width: 0; background: var(--ressonancia); transition: width 0.2s; }
 .loading-text { color: var(--muted); font-size: 0.9em; }
 .fatal { flex-direction: column; text-align: center; padding: 24px; background: var(--abismo); }
+.fatal p { max-width: min(640px, 92vw); overflow-wrap: anywhere; color: var(--muted); }
 
 #fade { position: absolute; inset: 0; background: var(--abismo); opacity: 0; pointer-events: none; }
 

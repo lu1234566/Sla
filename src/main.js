@@ -19,6 +19,7 @@ if (!webglAvailable()) {
   const game = new Game(canvas, ui);
   game.init().catch((err) => {
     console.error(err);
-    ui.innerHTML = `<div class="screen fatal"><h1>MARÉ DE VIDRO</h1><p>Falha ao iniciar: ${String(err.message || err).replace(/</g, '&lt;')}</p></div>`;
+    const msg = String(err.message || err).replace(/data:[^"\s]+/g, 'data:…').slice(0, 300).replace(/</g, '&lt;');
+    ui.innerHTML = `<div class="screen fatal"><h1>MARÉ DE VIDRO</h1><p>Falha ao iniciar: ${msg}</p></div>`;
   });
 }
