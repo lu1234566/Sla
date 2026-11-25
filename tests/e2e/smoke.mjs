@@ -82,10 +82,10 @@ try {
   await waitFor((x) => x.grounded, 5000);
 
   // planar do mirante até a ilha da cisterna
-  await teleport(0, 0.9, 30.0);
+  await teleport(0, 0.9, 32.3);
   await waitFor((x) => x.grounded, 3000);
   await page.keyboard.down('KeyW');
-  await page.waitForTimeout(150);
+  await waitFor((x) => x.z < 30.2, 6000, 'corrida até a borda'); // salta na borda, já correndo
   await page.keyboard.down('Space');
   const glided = await waitFor((x) => x.area === 'cisterna' && x.grounded, 15000, 'planar');
   await page.keyboard.up('Space');

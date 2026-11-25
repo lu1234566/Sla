@@ -2,6 +2,7 @@
 // modelos CC0 baixados (Quaternius), recoloridos com a paleta da bíblia de arte.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { mat, crystalMat, glowMat, PALETTE } from './palette.js';
 
 const BASE = import.meta.env.BASE_URL + 'models/';
@@ -143,7 +144,9 @@ export class Assets {
   prop(name, o = {}) {
     const src = this.props[name];
     if (!src) throw new Error(`prop desconhecido: ${name}`);
-    const inner = src.clone(true);
+    // SkeletonUtils.clone: modelos com esqueleto (ex.: a alavanca) precisam de
+    // ossos próprios; um clone comum reaproveitaria os ossos do original.
+    const inner = cloneSkinned(src);
     recolor(inner, PROPS[name][1], o.tone, o.variant);
     const off = this.propOffsets[name];
     let s = o.scale ?? 1;

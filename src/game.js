@@ -402,7 +402,8 @@ export class Game {
   }
 
   onGuardian(type) {
-    if (type === 'state' && this.guardian.state === 'waking') this.lumeSayOnce('lume.guardianWake', 4.5);
+    // só avisa quando Íris já está no jardim (a maré é do setor inteiro)
+    if (type === 'state' && this.guardian.state === 'waking') this.lumeSayOnce('lume.guardianWake', 4.5, () => this.world.reachedGarden);
     if (type === 'alert') {
       this.audio.play('alert');
       if (!this.said.has('saw2')) { this.lumeSay('lume.guardianSaw', 3.5); if (this.said.has('saw1')) this.said.add('saw2'); this.said.add('saw1'); }
