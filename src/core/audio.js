@@ -9,14 +9,20 @@ export class AudioEngine {
     this.tide = 1;
     this.alert = 0;
     this.started = false;
+    this.at = 0; // deslocamento de agendamento (usado só na renderização offline)
   }
 
-  /** Precisa ser chamado após um gesto do usuário. */
-  start() {
-    if (this.started) { this.ctx?.resume(); return; }
+  /**
+   * Precisa ser chamado após um gesto do usuário. Com `ctx` (ex.: um
+   * OfflineAudioContext) o motor gera o áudio fora de tempo real: defina
+   * `this.at` (segundos) antes de cada evento para agendá-lo nesse instante.
+   */
+  start(ctx = null) {
+    if (this.started) { this.ctx?.resume?.(); return; }
     const AC = globalThis.AudioContext || globalThis.webkitAudioContext;
-    if (!AC) return;
-    this.ctx = new AC();
+    if (!ctx && !AC) return;
+    this.ctx = ctx || new AC();
+    this.offline = !!ctx;
     const c = this.ctx;
     this.master = c.createGain();
     this.master.connect(c.destination);
@@ -36,7 +42,7 @@ export class AudioEngine {
     this.startPad();
     this.startAmbience();
     this.started = true;
-    this.chimeLoop();
+    if (!this.offline) this.chimeLoop();
   }
 
   setVolumes(v) { Object.assign(this.vol, v); this.applyVolumes(); }
@@ -144,7 +150,7 @@ export class AudioEngine {
   /** Sino de vidro: parciais inarmônicas com decaimento. */
   bell(freq, vol = 0.1, decay = 1.6, dest = this.sfx, when = 0) {
     if (!this.ctx) return;
-    const c = this.ctx, t = c.currentTime + when;
+    const c = this.ctx, t = c.currentTime + this.at + when;
     for (const [mult, amp] of [[1, 1], [2.76, 0.4], [5.4, 0.18], [8.93, 0.08]]) {
       const o = c.createOscillator();
       o.frequency.value = freq * mult;
@@ -159,7 +165,7 @@ export class AudioEngine {
 
   tone(freq, dur, { type = 'sine', vol = 0.15, slide = 0, when = 0 } = {}) {
     if (!this.ctx) return;
-    const c = this.ctx, t = c.currentTime + when;
+    const c = this.ctx, t = c.currentTime + this.at + when;
     const o = c.createOscillator();
     o.type = type;
     o.frequency.setValueAtTime(freq, t);
@@ -174,7 +180,7 @@ export class AudioEngine {
 
   whoosh(dur = 2.5, up = true, vol = 0.25) {
     if (!this.ctx) return;
-    const c = this.ctx, t = c.currentTime;
+    const c = this.ctx, t = c.currentTime + this.at;
     const src = c.createBufferSource();
     src.buffer = this.noiseBuffer(dur + 0.2);
     const f = c.createBiquadFilter();
@@ -224,7 +230,7 @@ export class AudioEngine {
   /** Atualiza camadas musicais. tide: 0..1, alert: 0..1. */
   update(tide, alert) {
     if (!this.ctx) return;
-    const t = this.ctx.currentTime;
+    const t = this.ctx.currentTime + this.at;
     this.tide = tide;
     this.padFilter.frequency.setTargetAtTime(500 + tide * 900, t, 0.5);
     this.padOscs.forEach(({ o, base }, i) => {

@@ -116,6 +116,24 @@ npm run dev & npm run test:e2e                   # ponta a ponta (Chromium/Playw
   descanso, save e **continuar após recarregar**. Salva screenshots se receber
   uma pasta: `node tests/e2e/smoke.mjs <url> docs/screenshots`.
 
+### Vídeo de gameplay
+
+[`docs/video/mare-de-vidro-gameplay.mp4`](docs/video/mare-de-vidro-gameplay.mp4) mostra a fatia inteira, do
+menu à tela final, jogada por um piloto automático (`tools/record/pilot.js`)
+que usa as mesmas entradas de um jogador — analógico de movimento, salto/planar,
+E, Q, R e Shift, sem teletransporte. Para regravar:
+
+```bash
+npm run dev            # em outro terminal
+node tools/record/record.mjs --tune   # ensaio rápido: lista falhas do roteiro
+npm run record         # grava docs/video/mare-de-vidro-gameplay.mp4 (1280x720, 30 fps, com som)
+```
+
+O relógio da página é controlado quadro a quadro (1/30 s de jogo por quadro),
+então o vídeo sai em velocidade real mesmo em máquinas sem GPU; o áudio é
+renderizado depois, com o mesmo motor de áudio do jogo, a partir dos eventos
+registrados durante a gravação.
+
 Utilitários de desenvolvimento em `tools/`: `model-sheet.html` (prancha de
 modelos para avaliar GLBs) e `shot.cjs` (screenshot automatizado do jogo).
 

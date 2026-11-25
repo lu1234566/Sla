@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "node --test tests/unit/*.test.js",
     "test:e2e": "node tests/e2e/smoke.mjs",
-    "build:artifact": "VITE_MODEL_EXT=.gltf.json vite build --outDir dist-artifact && node tools/glb-to-gltf-json.mjs public/models dist-artifact/models"
+    "build:artifact": "VITE_MODEL_EXT=.gltf.json vite build --outDir dist-artifact && node tools/glb-to-gltf-json.mjs public/models dist-artifact/models",
+    "record": "node tools/record/record.mjs --out docs/video/mare-de-vidro-gameplay.mp4"
   },
   "dependencies": {
     "three": "0.170.0"
