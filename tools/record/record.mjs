@@ -38,8 +38,11 @@ await page.clock.install();
 await page.goto(`${URL}?quality=${QUALITY}`);
 await page.waitForFunction(() => window.__mdv && window.__mdv.mode === 'menu', null, { timeout: 180000 });
 await page.evaluate(() => document.fonts.ready);
-const now = await page.evaluate(() => Date.now());
-await page.clock.pauseAt(now + 100);
+// congela o relógio da página (tenta de novo se a página já passou do instante pedido)
+for (let attempt = 0; ; attempt++) {
+  const now = await page.evaluate(() => Date.now());
+  try { await page.clock.pauseAt(now + 1000); break; } catch (err) { if (attempt > 5) throw err; }
+}
 
 await page.evaluate(async ({ tune, pilotOpts }) => {
   const { Pilot } = await import('/tools/record/pilot.js');
