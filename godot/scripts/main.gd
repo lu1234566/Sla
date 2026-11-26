@@ -106,6 +106,8 @@ func _ready() -> void:
 			mode = "play"
 		else:
 			show_main_menu()
+	if dbg.has("intro"):
+		_intro()
 	if dbg.has("shot"):
 		_debug_shot(dbg)
 	if playtest:
@@ -280,7 +282,7 @@ func _intro() -> void:
 	ui.show_hud(false)
 	var p = player.global_position
 	ui.show_title(I18n.t("title"), I18n.t("tagline"), 6.0)
-	if Game.options["reduce_motion"] or test_mode:
+	if Game.options["reduce_motion"] or (test_mode and not _debug_args().has("intro")):
 		_start_play()
 		_lume_say("lume.wake", 6.0)
 		return
@@ -327,22 +329,30 @@ func _caption_run(chunks: Array, total: float, token: int) -> void:
 		ui.say(c, d + 0.25, false, I18n.t("speaker.narrator"))
 		await get_tree().create_timer(d).timeout
 
-## Divide em frases e agrupa até `max_len` caracteres.
+## Divide em frases (". ! ?" — reticências não encerram frase) e agrupa até
+## `max_len` caracteres.
 func _chunks(text: String, max_len: int) -> Array:
-	var re = RegEx.create_from_string("[^.!?…]+[.!?…]+[”\"]?\\s*|[^.!?…]+$")
-	var out = []
+	var sentences = []
 	var cur = ""
-	for m in re.search_all(text):
-		var s = m.get_string().strip_edges()
-		if s == "":
-			continue
-		if cur != "" and cur.length() + s.length() + 1 > max_len:
-			out.append(cur)
-			cur = s
-		else:
-			cur = s if cur == "" else cur + " " + s
+	for w in text.split(" ", false):
+		cur = w if cur == "" else cur + " " + w
+		var t = w.rstrip("”\"»)")
+		if t.ends_with(".") or t.ends_with("!") or t.ends_with("?"):
+			if not t.ends_with("…") and not t.ends_with("..."):
+				sentences.append(cur)
+				cur = ""
 	if cur != "":
-		out.append(cur)
+		sentences.append(cur)
+	var out = []
+	var acc = ""
+	for snt in sentences:
+		if acc != "" and acc.length() + snt.length() + 1 > max_len:
+			out.append(acc)
+			acc = snt
+		else:
+			acc = snt if acc == "" else acc + " " + snt
+	if acc != "":
+		out.append(acc)
 	return out if not out.is_empty() else [text]
 
 func _start_play() -> void:

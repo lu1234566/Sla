@@ -197,11 +197,13 @@ func _build_hud() -> void:
 	hud.add_child(prompt_panel)
 	# legenda
 	subtitle = _panel()
+	subtitle.add_theme_stylebox_override("panel", _box(Color(0.03, 0.08, 0.11, 0.82), Color(0, 0, 0, 0), 0, 10, 16))
 	subtitle.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	subtitle.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	subtitle.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	subtitle.offset_bottom = -88
 	var sh = HBoxContainer.new()
+	sh.add_theme_constant_override("separation", 12)
 	subtitle_speaker = _label("Lume", 18, FONT_K, Palette.RESSONANCIA)
 	sh.add_child(subtitle_speaker)
 	subtitle_text = _label("", 18)
@@ -327,7 +329,7 @@ func say(text: String, seconds: float = 4.5, force: bool = false, speaker: Strin
 	if not subtitles_on and not force:
 		return
 	subtitle_speaker.text = speaker
-	subtitle_speaker.modulate = Palette.RESSONANCIA if speaker == "Lume" else Palette.COBRE
+	subtitle_speaker.add_theme_color_override("font_color", Palette.RESSONANCIA if speaker == "Lume" else Palette.COBRE)
 	subtitle_text.text = text
 	subtitle.visible = true
 	subtitle_t = seconds

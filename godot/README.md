@@ -46,13 +46,26 @@ volumes, qualidade, tela cheia, remapear teclas), **Controles** e **Créditos**.
 | Ação | Teclado / mouse | Controle |
 | --- | --- | --- |
 | Mover | WASD / setas | Analógico esquerdo |
-| Câmera · distância | Mouse · roda | Analógico direito |
+| Câmera · distância (volta sozinha para trás de Íris ao andar; dá para desligar nas opções) | Mouse · roda | Analógico direito |
 | Saltar · **segurar no ar: planar** | Espaço | A |
 | Interagir · enviar Lume ao pilão | E | X |
 | Maré (segurar 1 s perto de um nó) | Q | Y |
 | Escanear | R | RB |
 | Esquivar | Shift | B |
 | Pausa (diário, mapa, opções, checkpoint, voltar ao Farol) | Esc / P | Start |
+
+### Narração
+
+Em português, a **Lume** fala com a voz *Bianca* e uma **narradora** (voz
+*Lucinda*) conta o prólogo da abertura, as três memórias, a pergunta final e
+os epílogos — vozes geradas no [ElevenLabs](https://elevenlabs.io). Volume
+próprio em **Opções → Vozes**; a música abaixa enquanto alguém fala. Em inglês
+o jogo mostra só as legendas.
+
+O roteiro fica em `tools/voice_script.json` (uma geração por lote, com
+`[long pause]` entre as falas) e `tools/split_voice.py` corta cada lote em
+um arquivo por fala em `assets/audio/voice/pt/`, conferindo cada trecho com
+transcrição automática (Whisper) e escolhendo a melhor de duas tomadas.
 
 ## A campanha (~45–90 min)
 
@@ -120,5 +133,7 @@ godot --headless --path . --export-release "Linux"   build/linux/MareDeVidro.x86
   público), recoloridos com a paleta do GDD. Ver `assets/models/quaternius/LICENSE.txt`.
 - **Efeitos sonoros:** [Kenney](https://kenney.nl) — CC0, mais efeitos e
   trilhas gerados proceduralmente (`tools/gen_audio.py`).
+- **Vozes:** geradas no ElevenLabs (vozes *Bianca — Quirky and Animated* e
+  *Lucinda — Earthy and Wise*, da biblioteca de vozes).
 - **Fonte:** Lato — SIL Open Font License (`assets/fonts/OFL.txt`).
 - **Motor:** [Godot Engine](https://godotengine.org) 4.3 — MIT.
