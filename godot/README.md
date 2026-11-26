@@ -18,6 +18,10 @@ dois epílogos. O que o GDD não detalhava foi criado e está documentado em
 | --- | --- | --- |
 | ![](docs/screenshots/06-coracao.jpg) | ![](docs/screenshots/07-o-coracao.jpg) | ![](docs/screenshots/08-santuario-abissal.jpg) |
 
+**Vídeo:** [`docs/video/mare-de-vidro-campanha.mp4`](docs/video/mare-de-vidro-campanha.mp4)
+— a campanha inteira jogada pelo piloto automático do teste (velocidade 1,5×,
+com som do jogo).
+
 ## Jogar
 
 Baixe o executável da sua plataforma, extraia e rode — é um arquivo só, sem
