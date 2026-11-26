@@ -57,8 +57,8 @@ volumes, qualidade, tela cheia, remapear teclas), **Controles** e **Créditos**.
 ### Narração
 
 Em português, a **Lume** fala com a voz *Bianca* e uma **narradora** (voz
-*Lucinda*) conta o prólogo da abertura, as três memórias, a pergunta final e
-os epílogos — vozes geradas no [ElevenLabs](https://elevenlabs.io). Volume
+*Lucinda*) conta o prólogo da abertura, os 18 ecos, as três memórias, a
+pergunta final e os epílogos — vozes geradas no [ElevenLabs](https://elevenlabs.io). Volume
 próprio em **Opções → Vozes**; a música abaixa enquanto alguém fala. Em inglês
 o jogo mostra só as legendas.
 

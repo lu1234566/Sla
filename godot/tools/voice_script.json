@@ -229,6 +229,85 @@
      "O mar vira vidro e cristais cobrem o Farol. Nada mais cai; nada mais parte. [softly] Guardamos tudo. Agora precisamos aprender a visitar."
     ]
    ]
+  },
+  {
+   "id": "narradora_ecos",
+   "voice": "narradora",
+   "takes": 1,
+   "lines": [
+    [
+     "echo.farol_ilhota",
+     "[softly] O faroleiro acendia a luz para quem voltava. Depois da Fratura, ninguém voltou — e ele continuou acendendo."
+    ],
+    [
+     "echo.farol_topo",
+     "A última luz do Farol apontava para o Coração. Disseram que era só um costume."
+    ],
+    [
+     "echo.farol_arquivo",
+     "No arquivo, cada ilha tinha um mapa diferente. Nenhum mostrava o fundo."
+    ],
+    [
+     "echo.jardim_flutuante",
+     "Plantei cristais onde antes havia corais. Eles crescem devagar, mas não esquecem a forma da água."
+    ],
+    [
+     "echo.jardim_cisterna",
+     "A cisterna guardava água de chuva. Depois, guardou a chuva inteira."
+    ],
+    [
+     "echo.jardim_ilhota",
+     "Se alguém ler este mapa: a maré não é inimiga. Ela só quer terminar o que começou."
+    ],
+    [
+     "echo.jardim_praca",
+     "O primeiro guardião foi feito de sal, para lembrar o mar que ele vigiava."
+    ],
+    [
+     "echo.jardim_mirante",
+     "Daqui o vento parava no meio do caminho. Como nós."
+    ],
+    [
+     "echo.cidade_torre",
+     "Viramos a cidade para que o peso ficasse em cima. Achamos que assim nada cairia."
+    ],
+    [
+     "echo.cidade_bonde",
+     "O último bonde partiu vazio. O condutor disse que alguém precisava terminar a linha."
+    ],
+    [
+     "echo.cidade_mercado",
+     "No mercado, trocávamos lembranças por anos. Ficou caro esquecer."
+    ],
+    [
+     "echo.cidade_praca",
+     "A comporta foi a primeira coisa que fechamos. A última que tentamos abrir."
+    ],
+    [
+     "echo.cidade_varanda",
+     "Da varanda dava para ver o oceano parado. Parecia vidro. Parecia seguro."
+    ],
+    [
+     "echo.coracao_camara",
+     "Eram duas vozes no Coração: uma pedia para segurar, a outra para soltar."
+    ],
+    [
+     "echo.coracao_leito",
+     "No leito seco ainda havia conchas. O mar tinha estado ali — e queria voltar."
+    ],
+    [
+     "echo.coracao_agulha",
+     "A agulha media o tempo pela maré. Desde a votação, marca sempre a mesma hora."
+    ],
+    [
+     "echo.coracao_espiral",
+     "Descer até o Coração era como lembrar: cada degrau, uma maré diferente."
+    ],
+    [
+     "echo.coracao_mirante",
+     "Olhe para baixo. É de lá que viemos. É para lá que tudo quer ir."
+    ]
+   ]
   }
  ]
 }

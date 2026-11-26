@@ -965,11 +965,21 @@ func _lume_arrived() -> void:
 
 func on_echo(id: String) -> void:
 	Sfx.play("echo")
-	ui.show_toast(I18n.t("region." + id.split("_")[0]), I18n.t("echo." + id), 8.0)
-	lume_once("lume.echo", 3.5)
+	# a narradora lê o eco; sem gravação, a Lume comenta como antes
+	var vl = Sfx.voice("echo." + id)
+	ui.show_toast(I18n.t("region." + id.split("_")[0]), I18n.t("echo." + id), maxf(8.0, vl + 1.5))
+	if vl <= 0.0:
+		lume_once("lume.echo", 3.5)
 	if Game.any_upgrade_ready():
-		say("lume.upgrade", 4.0)
+		if vl > 0.0:
+			get_tree().create_timer(vl + 0.4).timeout.connect(_say_upgrade)
+		else:
+			_say_upgrade()
 	Game.save_game()
+
+func _say_upgrade() -> void:
+	if mode == "play":
+		say("lume.upgrade", 4.0)
 
 func on_ability(a: String) -> void:
 	Sfx.play("unlock")
