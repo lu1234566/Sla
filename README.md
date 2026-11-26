@@ -1,6 +1,17 @@
-# Maré de Vidro — fatia vertical jogável (Jardim Mineral)
+# Maré de Vidro
 
 > *Um oceano suspenso. Uma memória que insiste em voltar.*
+
+**Versão completa para PC (Godot 4.3):** campanha inteira — Farol Nulo,
+Jardim Mineral, Cidade Invertida e Coração Abissal, 18 ecos, 3 habilidades,
+oficina, final com escolha — com executáveis para Windows e Linux. Veja
+[`godot/README.md`](godot/README.md).
+
+Abaixo, o protótipo web original (fatia vertical do Jardim Mineral).
+
+---
+
+## Protótipo web — fatia vertical jogável (Jardim Mineral)
 
 Implementação jogável da **fatia vertical do Jardim Mineral** descrita no GDD
 ([`docs/Mare_de_Vidro_GDD.pdf`](docs/Mare_de_Vidro_GDD.pdf), página 13): Íris
