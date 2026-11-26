@@ -225,7 +225,7 @@ func show_main_menu() -> void:
 	items.append([I18n.t("menu.controls"), func(): show_controls(show_main_menu)])
 	items.append([I18n.t("menu.credits"), func(): show_credits(show_main_menu)])
 	items.append([I18n.t("menu.quit"), func(): get_tree().quit()])
-	ui.open_menu(I18n.t("title"), items, {"eyebrow": I18n.t("region.farol").to_upper(), "subtitle": I18n.t("tagline"), "title_size": 56, "bg_alpha": 0.25, "width": 520})
+	ui.open_menu(I18n.t("title"), items, {"eyebrow": I18n.t("region.farol").to_upper(), "subtitle": I18n.t("tagline"), "title_size": 56, "bg_alpha": 0.12, "width": 520, "left": true, "margin": 90})
 
 func _any_completed() -> bool:
 	for s in range(1, SaveManager.SLOTS + 1):
@@ -520,9 +520,12 @@ func _process(dt: float) -> void:
 	match mode:
 		"menu":
 			menu_angle += dt * 0.05
+			# órbita lenta; a ilha fica à direita do painel do menu
 			var center: Vector3 = region.env.get("center", Vector3.ZERO)
-			cam.camera.global_position = center + Vector3(sin(menu_angle) * 52, 22, cos(menu_angle) * 52)
-			cam.camera.look_at(center + Vector3(0, -2, 0), Vector3.UP)
+			var cpos = center + Vector3(sin(menu_angle) * 40, 15, cos(menu_angle) * 40)
+			var right = (center - cpos).normalized().cross(Vector3.UP).normalized()
+			cam.camera.global_position = cpos
+			cam.camera.look_at(center + Vector3(0, -1, 0) - right * 13.0, Vector3.UP)
 			player.active = false
 			lume.update_lume(dt, player.global_position, player.facing, cam.camera.global_position)
 			_update_guardians(dt, false)

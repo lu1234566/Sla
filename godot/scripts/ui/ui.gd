@@ -413,6 +413,8 @@ func open_menu(title: String, items: Array, opts: Dictionary = {}) -> VBoxContai
 	else:
 		panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	panel.custom_minimum_size.x = opts.get("width", 560)
+	if opts.get("left", false):
+		panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	center.add_child(panel)
 	var scroll = ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED

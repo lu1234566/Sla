@@ -286,6 +286,7 @@ func run() -> void:
 	Engine.max_physics_steps_per_frame = 24
 	Engine.time_scale = speed
 	await until(func(): return main.region != null and main.region.id == "farol" and main.mode == "play", 20.0)
+	main.ui.show_hud(true)
 	await wait(0.5)
 	var sections = [["farol_1", _farol_1], ["jardim", _jardim], ["farol_2", _farol_2], ["cidade", _cidade],
 		["farol_3", _farol_3], ["jardim_2", _jardim_2], ["farol_4", _farol_4], ["coracao", _coracao], ["final", _final]]
