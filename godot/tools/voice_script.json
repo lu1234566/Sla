@@ -1,0 +1,234 @@
+{
+ "_doc": "Roteiro da narração (PT-BR). Cada lote vira uma geração no ElevenLabs com [long pause] entre as falas; tools/split_voice.py corta nos silêncios e grava assets/audio/voice/pt/<chave>.ogg. As legendas continuam vindo do i18n (o texto falado omite nomes de teclas e valores variáveis).",
+ "voices": {
+  "lume": {
+   "name": "Bianca - Quirky and Animated",
+   "voice_id": "HReOQZPV9tH5iTEnSbGo"
+  },
+  "narradora": {
+   "name": "Lucinda - Earthy and Wise",
+   "voice_id": "fs3nd19KF2GO2hLTzkBm"
+  }
+ },
+ "model_id": "eleven_v4",
+ "batches": [
+  {
+   "id": "lume_1",
+   "voice": "lume",
+   "lines": [
+    [
+     "lume.wake",
+     "[excited] Íris! Você acordou. [softly] O Farol ainda está apagado, mas a maré responde a quem escuta."
+    ],
+    [
+     "lume.jump",
+     "[warmly] Venha comigo. Salte pelas pedras."
+    ],
+    [
+     "lume.node",
+     "[curious] Aquele anel de pedra é um nó de ressonância. Escaneie."
+    ],
+    [
+     "lume.tide_learn",
+     "Perto de um nó, segure o botão da maré. A água obedece por um setor inteiro."
+    ],
+    [
+     "lume.tide_ok",
+     "[excited] Você baixou a maré! [softly] Controlar o oceano… é possível."
+    ],
+    [
+     "lume.farol",
+     "O Farol Nulo. Daqui partem as travessias. A do Jardim acordou."
+    ],
+    [
+     "lume.portal_new",
+     "[curious] Um novo portal despertou no Farol."
+    ],
+    [
+     "lume.jardim",
+     "O Jardim Mineral. Uma cisterna inundada… e outro nó."
+    ],
+    [
+     "lume.conductor",
+     "O circuito está alinhado. Agora ele precisa de água para correr."
+    ],
+    [
+     "lume.bridge",
+     "[excited] A ponte se formou! Ela só segura enquanto a maré estiver alta."
+    ],
+    [
+     "lume.wing",
+     "[happy] Instalei a Asa de Vidro. Salte e segure o salto para planar."
+    ],
+    [
+     "lume.sluice",
+     "A comporta da praça está fechada. A alavanca fica naquela ilhota."
+    ],
+    [
+     "lume.sluice_open",
+     "[excited] Comporta aberta! A praça está livre — quando a maré baixar."
+    ],
+    [
+     "lume.guardian_wake",
+     "[whispers] Cuidado: o guardião acordou. Ele só vigia o piso seco."
+    ],
+    [
+     "lume.guardian_saw",
+     "[nervous] Ele nos viu! Saia do piso seco ou esquive!"
+    ],
+    [
+     "lume.guardian_lost",
+     "[whispers] Ele desistiu. Use as coberturas."
+    ],
+    [
+     "lume.pillar",
+     "O pilar guarda a ordem do circuito."
+    ],
+    [
+     "lume.plates_wrong",
+     "[sighs] Ordem errada. O circuito se apagou."
+    ],
+    [
+     "lume.pacified",
+     "[softly] O núcleo do guardião se acalmou. O caminho abriu."
+    ],
+    [
+     "lume.conduit",
+     "Um conduto aceso. Falta o outro."
+    ],
+    [
+     "lume.ring",
+     "[surprised] O anel despertou. [softly] Há uma memória aqui."
+    ],
+    [
+     "lume.rest",
+     "[warmly] Descanse. O santuário guarda o caminho."
+    ]
+   ]
+  },
+  {
+   "id": "lume_2",
+   "voice": "lume",
+   "lines": [
+    [
+     "lume.cidade",
+     "[curious] A Cidade Invertida. Tudo o que pesava ficou pendurado."
+    ],
+    [
+     "lume.relay_get",
+     "[excited] Agora posso levar o sinal longe: escaneie um pilão e me envie."
+    ],
+    [
+     "lume.relay_go",
+     "[mischievously] Deixa comigo!"
+    ],
+    [
+     "lume.relay_on",
+     "[happy] Relé ligado!"
+    ],
+    [
+     "lume.network",
+     "A porta precisa de um caminho de energia. Gire as junções."
+    ],
+    [
+     "lume.network_ok",
+     "[excited] Caminho completo! A porta está viva."
+    ],
+    [
+     "lume.twins",
+     "[cautiously] Dois guardiões. Precisamos ligar os dois pilões."
+    ],
+    [
+     "lume.coracao",
+     "[softly] O Coração Abissal. Três setores, três marés."
+    ],
+    [
+     "lume.dual",
+     "Ressonância dupla: alguns nós mexem em dois setores ao mesmo tempo."
+    ],
+    [
+     "lume.pattern",
+     "Os pilares mostram o padrão."
+    ],
+    [
+     "lume.heart",
+     "[whispers] O Coração está aberto. É aqui que se decide."
+    ],
+    [
+     "lume.fall",
+     "[laughs softly] Te peguei. De volta ao último piso seguro."
+    ],
+    [
+     "lume.hit_low",
+     "[nervous] Integridade baixa. Um santuário pode restaurá-la."
+    ],
+    [
+     "lume.reboot",
+     "Reiniciando Íris no checkpoint…"
+    ],
+    [
+     "lume.checkpoint",
+     "Checkpoint registrado."
+    ],
+    [
+     "lume.echo",
+     "[happy] Um eco! Mais uma lembrança devolvida."
+    ],
+    [
+     "lume.upgrade",
+     "Há uma melhoria pronta na oficina do Farol."
+    ],
+    [
+     "lume.compass",
+     "O eco mais próximo fica para lá."
+    ],
+    [
+     "hint.generic.1",
+     "[curious] Observe o lugar: silhuetas e luz indicam o caminho."
+    ],
+    [
+     "hint.generic.2",
+     "Escaneie para ver o que é interativo."
+    ],
+    [
+     "hint.generic.3",
+     "Marquei o próximo ponto com um feixe de luz."
+    ]
+   ]
+  },
+  {
+   "id": "narradora_1",
+   "voice": "narradora",
+   "lines": [
+    [
+     "intro.narration",
+     "[softly] Houve um tempo em que o mar caía do céu em cascatas lentas. [pause] Então um povo inteiro levantou as mãos… e pediu que ele parasse. [pause] O oceano obedeceu. E ficou suspenso, esperando. [warmly] Agora, no Farol Nulo, uma pequena máquina desperta."
+    ],
+    [
+     "mem.jardim.text",
+     "[softly] Ninguém foi obrigado. Levantamos as mãos e o mar parou de cair. Achamos que guardar tudo era o mesmo que lembrar."
+    ],
+    [
+     "mem.cidade.text",
+     "Construímos guardiões para que ninguém desfizesse a votação. Demos a eles uma única ordem: proteger o seco. [sighs] Esquecemos de dizer o porquê."
+    ],
+    [
+     "mem.coracao.text",
+     "[softly] Se algum dia uma máquina chegar até aqui, que ela escolha melhor do que nós. [pause] Não pedimos perdão. Pedimos uma segunda maré."
+    ],
+    [
+     "final.question",
+     "O Coração guarda o oceano parado. [pause] Liberar o ciclo natural… ou manter o arquipélago estável?"
+    ],
+    [
+     "final.free.text",
+     "[warmly] O oceano volta a cair em cascatas lentas. As ilhas descem com ele, devagar, e o Farol acende para quem volta. [softly] Vamos lembrar sem prender."
+    ],
+    [
+     "final.keep.text",
+     "O mar vira vidro e cristais cobrem o Farol. Nada mais cai; nada mais parte. [softly] Guardamos tudo. Agora precisamos aprender a visitar."
+    ]
+   ]
+  }
+ ]
+}

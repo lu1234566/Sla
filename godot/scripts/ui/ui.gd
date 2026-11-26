@@ -24,6 +24,7 @@ var prompt_text: Label
 var prompt_bar: ProgressBar
 var subtitle: PanelContainer
 var subtitle_text: Label
+var subtitle_speaker: Label
 var toast: PanelContainer
 var toast_title: Label
 var toast_text: Label
@@ -201,14 +202,15 @@ func _build_hud() -> void:
 	subtitle.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	subtitle.offset_bottom = -88
 	var sh = HBoxContainer.new()
-	sh.add_child(_label("Lume", 18, FONT_K, Palette.RESSONANCIA))
+	subtitle_speaker = _label("Lume", 18, FONT_K, Palette.RESSONANCIA)
+	sh.add_child(subtitle_speaker)
 	subtitle_text = _label("", 18)
 	subtitle_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	subtitle_text.custom_minimum_size.x = 520
 	sh.add_child(subtitle_text)
 	subtitle.add_child(sh)
 	subtitle.visible = false
-	hud.add_child(subtitle)
+	add_child(subtitle)
 	# toast (eco, memória)
 	toast = _panel()
 	toast.add_theme_stylebox_override("panel", _box(Color(0.075, 0.17, 0.23, 0.95), Palette.RESSONANCIA, 2, 10, 22))
@@ -321,9 +323,11 @@ func set_prompt(p: Dictionary) -> void:
 	prompt_bar.visible = p.has("hold") and p["hold"] > 0.0
 	prompt_bar.value = p.get("hold", 0.0) * 100.0
 
-func say(text: String, seconds: float = 4.5, force: bool = false) -> void:
+func say(text: String, seconds: float = 4.5, force: bool = false, speaker: String = "Lume") -> void:
 	if not subtitles_on and not force:
 		return
+	subtitle_speaker.text = speaker
+	subtitle_speaker.modulate = Palette.RESSONANCIA if speaker == "Lume" else Palette.COBRE
 	subtitle_text.text = text
 	subtitle.visible = true
 	subtitle_t = seconds

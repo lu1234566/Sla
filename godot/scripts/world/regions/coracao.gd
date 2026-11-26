@@ -478,6 +478,7 @@ func _heart_act(_ctx: Dictionary) -> void:
 	_open_choice()
 
 func _open_choice() -> void:
+	main.narrate("final.question")
 	main.mode = "paused"
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	Sfx.play("ui_open")

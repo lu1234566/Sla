@@ -14,7 +14,7 @@ const VISOR_COLOR := {"turquesa": Color("#7CF4DC"), "cobre": Color("#F3AB63"), "
 const DEFAULT_OPTIONS := {
 	"language": "pt", "sensitivity": 1.0, "invert_y": false, "text_scale": 1.0, "hints": true,
 	"assisted": false, "reduce_motion": false, "glow": true, "contrast": false, "subtitles": true,
-	"master": 0.85, "music": 0.6, "sfx": 0.8, "quality": "high", "fullscreen": false, "keys": {},
+	"master": 0.85, "music": 0.6, "sfx": 0.8, "voice": 1.0, "cam_follow": true, "quality": "high", "fullscreen": false, "keys": {},
 }
 
 ## ação -> [teclas físicas padrão, botões do controle]

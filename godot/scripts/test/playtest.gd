@@ -305,6 +305,7 @@ func _report() -> void:
 	Engine.time_scale = 1.0
 	sec_name = "resumo"
 	var st: Dictionary = Game.state["stats"]
+	say("falas narradas com voz: %d (%s)" % [Sfx.voices_played.size(), ", ".join(Sfx.voices_played.slice(0, 6))])
 	say("ecos %d/18 · memórias %s · final '%s' · quedas %d · tempo de jogo %s" % [Game.echo_count(), str(Game.state["memories"]), Game.state.get("ending", ""), int(st.get("falls", 0)), Game.fmt_time(st.get("time", 0.0))])
 	var res = "PASSOU" if fails.is_empty() else "FALHOU (%d)" % fails.size()
 	say("RESULTADO: " + res)

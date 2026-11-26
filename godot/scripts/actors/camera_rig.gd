@@ -17,6 +17,7 @@ var exclude: Array[RID] = []
 var _cine: Dictionary = {}
 var override_look: Variant = null  # {target: Vector3, until: float, pitch, dist}
 var _clock = 0.0
+var _manual_t = 99.0  # tempo desde o último movimento manual da câmera
 
 func _ready() -> void:
 	camera = Camera3D.new()
@@ -60,8 +61,11 @@ static func _catmull(points: Array, key: String, t: float) -> Vector3:
 func look_at_point(target: Vector3, seconds: float, p: float = 0.45, d: float = 7.0) -> void:
 	override_look = {"target": target, "until": _clock + seconds, "pitch": p, "dist": d}
 
-func update_camera(dt: float, look: Vector2, wheel: float, target: Vector3, facing: float) -> void:
+## follow_speed > 0: velocidade horizontal de Íris, para a câmera voltar
+## sozinha para trás dela enquanto anda (sem brigar com o mouse/analógico).
+func update_camera(dt: float, look: Vector2, wheel: float, target: Vector3, facing: float, follow_speed: float = 0.0) -> void:
 	_clock += dt
+	_manual_t = 0.0 if look.length() > 0.0004 else _manual_t + dt
 	if not _cine.is_empty():
 		_cine["t"] += dt / _cine["duration"]
 		var e = 0.5 - 0.5 * cos(PI * minf(1.0, _cine["t"]))
@@ -72,6 +76,13 @@ func update_camera(dt: float, look: Vector2, wheel: float, target: Vector3, faci
 		return
 	yaw -= look.x
 	pitch = clampf(pitch + look.y, -0.35, 1.2)
+	if follow_speed > 1.0 and _manual_t > 0.9 and override_look == null:
+		var diff = wrapf(facing + PI - yaw, -PI, PI)
+		# correndo em direção à câmera não gira 180° (deixa o jogador ver o caminho)
+		if absf(diff) < 2.5:
+			var k = clampf((follow_speed - 1.0) / 3.5, 0.0, 1.0) * 1.5
+			yaw += diff * (1.0 - exp(-k * dt))
+			pitch = lerpf(pitch, 0.3, 1.0 - exp(-0.5 * dt))
 	if wheel != 0.0:
 		target_dist = clampf(target_dist + wheel * 0.6, 2.5, 11.0)
 	var want_dist = target_dist

@@ -5,6 +5,7 @@ extends Node
 const GEN := "res://assets/audio/sfx/"
 const KEN := "res://assets/audio/kenney/"
 const MUS := "res://assets/audio/music/"
+const VOICE := "res://assets/audio/voice/"
 
 const MAP := {
 	"step": ["k:footstep_concrete_000", "k:footstep_concrete_001", "k:footstep_concrete_002", "k:footstep_concrete_003", "k:footstep_concrete_004"],
@@ -23,10 +24,13 @@ var _music_b: AudioStreamPlayer
 var _alert: AudioStreamPlayer
 var _current_track = ""
 var _alert_level = 0.0
+var _voice: AudioStreamPlayer
+var _duck = 0.0
+var voices_played: Array = []  # chaves narradas nesta sessão (teste/diagnóstico)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	for bus in ["Music", "SFX"]:
+	for bus in ["Music", "SFX", "Voice"]:
 		if AudioServer.get_bus_index(bus) < 0:
 			AudioServer.add_bus()
 			var i = AudioServer.bus_count - 1
@@ -42,6 +46,9 @@ func _ready() -> void:
 		p.bus = "SFX"
 		add_child(p)
 		_players.append(p)
+	_voice = AudioStreamPlayer.new()
+	_voice.bus = "Voice"
+	add_child(_voice)
 	_music_a = _make_music_player()
 	_music_b = _make_music_player()
 	_alert = _make_music_player()
@@ -62,6 +69,41 @@ func apply_volumes() -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(0.0001, o["master"])))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(maxf(0.0001, o["music"])))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(maxf(0.0001, o["sfx"])))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Voice"), linear_to_db(maxf(0.0001, o.get("voice", 1.0))))
+	_apply_music_volume()
+
+func _apply_music_volume() -> void:
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(maxf(0.0001, Game.options["music"])) + _duck)
+
+## Narração gravada (ElevenLabs) da fala `key` no idioma atual, se existir.
+## Devolve a duração em segundos (0 = sem voz: fica só a legenda).
+func voice(key: String) -> float:
+	if Game.options.get("voice", 1.0) <= 0.0:
+		return 0.0
+	var path = VOICE + I18n.lang + "/" + key + ".ogg"
+	if not ResourceLoader.exists(path):
+		return 0.0
+	var s = _load(path)
+	if s == null:
+		return 0.0
+	_voice.stream = s
+	_voice.play()
+	voices_played.append(key)
+	return s.get_length()
+
+func stop_voice() -> void:
+	_voice.stop()
+
+func voice_playing() -> bool:
+	return _voice.playing
+
+func _process(dt: float) -> void:
+	# a música abaixa enquanto alguém fala
+	var target = -8.0 if _voice.playing else 0.0
+	var nd = move_toward(_duck, target, dt * (30.0 if target < _duck else 6.0))
+	if not is_equal_approx(nd, _duck):
+		_duck = nd
+		_apply_music_volume()
 
 func _load(path: String) -> AudioStream:
 	if not _cache.has(path):

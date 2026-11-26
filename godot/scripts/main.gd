@@ -284,16 +284,66 @@ func _intro() -> void:
 		_start_play()
 		_lume_say("lume.wake", 6.0)
 		return
+	# a narradora conta o prólogo durante o voo de câmera (que dura o mesmo)
+	var nar = narrate("intro.narration")
 	cam.play([
 		{"pos": Vector3(24, 22, -40), "look": Vector3(0, 6, -20)},
 		{"pos": Vector3(18, 12, -6), "look": Vector3(0, 2, -8)},
 		{"pos": Vector3(6, 6, p.z + 10), "look": p + Vector3(0, 1, 0)},
 		{"pos": p + Vector3(0, 3.2, 5.8), "look": p + Vector3(0, 1.25, 0)},
-	], 9.0, _intro_done)
+	], maxf(9.0, nar + 0.8), _intro_done)
 
 func _intro_done() -> void:
+	stop_narration()
 	_start_play()
 	_lume_say("lume.wake", 6.0)
+
+# --- narração ------------------------------------------------------------------------
+
+var _caption_token = 0
+
+## Voz da narradora + legenda em trechos proporcionais à duração da fala.
+## Devolve a duração (estimada pelo texto quando não há gravação).
+func narrate(key: String) -> float:
+	var text = I18n.t(key)
+	var vl = Sfx.voice(key)
+	var total = vl if vl > 0.0 else text.length() / 14.0
+	_caption_token += 1
+	_caption_run(_chunks(text, 118), total, _caption_token)
+	return total
+
+func stop_narration() -> void:
+	_caption_token += 1
+	Sfx.stop_voice()
+
+func _caption_run(chunks: Array, total: float, token: int) -> void:
+	var n = 0
+	for c in chunks:
+		n += c.length()
+	for c in chunks:
+		if token != _caption_token:
+			return
+		var d = total * float(c.length()) / maxf(1.0, n)
+		ui.say(c, d + 0.25, false, I18n.t("speaker.narrator"))
+		await get_tree().create_timer(d).timeout
+
+## Divide em frases e agrupa até `max_len` caracteres.
+func _chunks(text: String, max_len: int) -> Array:
+	var re = RegEx.create_from_string("[^.!?…]+[.!?…]+[”\"]?\\s*|[^.!?…]+$")
+	var out = []
+	var cur = ""
+	for m in re.search_all(text):
+		var s = m.get_string().strip_edges()
+		if s == "":
+			continue
+		if cur != "" and cur.length() + s.length() + 1 > max_len:
+			out.append(cur)
+			cur = s
+		else:
+			cur = s if cur == "" else cur + " " + s
+	if cur != "":
+		out.append(cur)
+	return out if not out.is_empty() else [text]
 
 func _start_play() -> void:
 	mode = "play"
@@ -338,10 +388,10 @@ func show_options(back: Callable) -> void:
 			lang.select(i)
 	lang.item_selected.connect(func(i): Game.set_option("language", I18n.LANGS[i][0]); show_options(back))
 	controls.append(ui.row(I18n.t("opt.language"), lang))
-	for pair in [["assisted", "opt.assisted", "opt.assisted_help"], ["hints", "opt.hints", ""], ["subtitles", "opt.subtitles", ""], ["contrast", "opt.contrast", ""], ["reduce_motion", "opt.motion", ""], ["glow", "opt.glow", ""], ["invert_y", "opt.invert", ""], ["fullscreen", "opt.fullscreen", ""]]:
+	for pair in [["assisted", "opt.assisted", "opt.assisted_help"], ["cam_follow", "opt.cam_follow", "opt.cam_follow_help"], ["hints", "opt.hints", ""], ["subtitles", "opt.subtitles", ""], ["contrast", "opt.contrast", ""], ["reduce_motion", "opt.motion", ""], ["glow", "opt.glow", ""], ["invert_y", "opt.invert", ""], ["fullscreen", "opt.fullscreen", ""]]:
 		var key: String = pair[0]
 		var cb = CheckButton.new()
-		cb.button_pressed = o[key]
+		cb.button_pressed = o.get(key, Game.DEFAULT_OPTIONS.get(key, false))
 		cb.toggled.connect(func(v): Game.set_option(key, v))
 		controls.append(ui.row(I18n.t(pair[1]), cb, I18n.t(pair[2]) if pair[2] != "" else ""))
 	var ts = OptionButton.new()
@@ -356,13 +406,13 @@ func show_options(back: Callable) -> void:
 	q.select(0 if o["quality"] == "high" else 1)
 	q.item_selected.connect(func(i): Game.set_option("quality", "high" if i == 0 else "low"))
 	controls.append(ui.row(I18n.t("opt.quality"), q))
-	for pair in [["sensitivity", "opt.sens", 0.3, 2.5], ["master", "opt.master", 0.0, 1.0], ["music", "opt.music", 0.0, 1.0], ["sfx", "opt.sfx", 0.0, 1.0]]:
+	for pair in [["sensitivity", "opt.sens", 0.3, 2.5], ["master", "opt.master", 0.0, 1.0], ["music", "opt.music", 0.0, 1.0], ["sfx", "opt.sfx", 0.0, 1.0], ["voice", "opt.voice", 0.0, 1.0]]:
 		var key: String = pair[0]
 		var sl = HSlider.new()
 		sl.min_value = pair[2]
 		sl.max_value = pair[3]
 		sl.step = 0.05
-		sl.value = o[key]
+		sl.value = o.get(key, Game.DEFAULT_OPTIONS.get(key, 1.0))
 		sl.custom_minimum_size.x = 200
 		sl.value_changed.connect(func(v): Game.set_option(key, v))
 		controls.append(ui.row(I18n.t(pair[1]), sl))
@@ -551,7 +601,8 @@ func _play(dt: float) -> void:
 	if Game.options["invert_y"]:
 		look.y = -look.y
 	if not autopilot_keys.has("cam_yaw"):
-		cam.update_camera(dt, look, wheel, player.global_position, player.facing)
+		var follow = player.speed_h if Game.options.get("cam_follow", true) else 0.0
+		cam.update_camera(dt, look, wheel, player.global_position, player.facing, follow)
 	else:
 		cam.yaw = autopilot_keys["cam_yaw"]
 		cam.update_camera(dt, Vector2.ZERO, 0.0, player.global_position, player.facing)
@@ -753,14 +804,20 @@ func _objectives(dt: float) -> void:
 		hint_level += 1
 		Game.stat("hints")
 		var key = "hint.%s.%d" % [oid, hint_level]
-		ui.say(I18n.t(key) if I18n.has(key) else I18n.t("hint.generic.%d" % hint_level), 7.0, true)
-		Sfx.play("lume", -4.0)
+		if not I18n.has(key):
+			key = "hint.generic.%d" % hint_level
+		var vl = Sfx.voice(key)
+		ui.say(I18n.t(key), maxf(7.0, vl + 0.6), true)
+		if vl <= 0.0:
+			Sfx.play("lume", -4.0)
 		if hint_level >= 2:
 			mark(o["target"].call(), 8.0)
 
 func _lume_say(key: String, seconds: float = 4.5, params: Dictionary = {}) -> void:
-	ui.say(I18n.t(key, params), seconds)
-	Sfx.play("lume", -6.0)
+	var vl = Sfx.voice(key)
+	ui.say(I18n.t(key, params), maxf(seconds, vl + 0.6))
+	if vl <= 0.0:
+		Sfx.play("lume", -6.0)
 
 func lume_once(key: String, seconds: float = 4.5, params: Dictionary = {}) -> void:
 	var k = region.id + ":" + key if region else key
@@ -914,7 +971,8 @@ func on_memory(rid: String) -> void:
 		return
 	Game.state["memories"].append(rid)
 	Sfx.play("echo")
-	ui.show_toast(I18n.t("mem.%s.title" % rid), I18n.t("mem.%s.text" % rid), 10.0)
+	var vl = Sfx.voice("mem.%s.text" % rid)
+	ui.show_toast(I18n.t("mem.%s.title" % rid), I18n.t("mem.%s.text" % rid), maxf(10.0, vl + 1.5))
 	Game.save_game()
 
 func rest_at(checkpoint_id: String) -> void:
@@ -945,6 +1003,7 @@ func finish(choice: String) -> void:
 func _epilogue(choice: String) -> void:
 	await load_region("farol", "hub")
 	mode = "ending"
+	Sfx.voice("final.%s.text" % choice)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var st: Dictionary = Game.state["stats"]
 	var stats = I18n.t("end.stats", {"time": Game.fmt_time(st["time"]), "echoes": Game.echo_count(), "falls": int(st["falls"]), "hits": int(st["hits"]), "hints": int(st["hints"])})
